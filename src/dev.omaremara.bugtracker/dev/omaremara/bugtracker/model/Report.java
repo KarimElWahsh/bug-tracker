@@ -16,7 +16,7 @@ public class Report {
   public Project project;
   public User assigne;
 
-  Report(int id, String title, String description, ReportLevel level,
+  Report(String title, String description, ReportLevel level,
          ReportPriority priority, ReportType type, Project project,
          User assigne) {
     this.title = title;
@@ -27,6 +27,7 @@ public class Report {
     this.project = project;
     this.id = id;
     this.type = type;
+
   }
 
   @Override

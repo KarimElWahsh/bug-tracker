@@ -1,6 +1,7 @@
 package dev.omaremara.bugtracker;
 
 import dev.omaremara.bugtracker.model.User;
+import dev.omaremara.bugtracker.model.UserRole;
 import dev.omaremara.bugtracker.view.LoginView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -17,5 +18,9 @@ public class Main extends Application {
     stage.show();
   }
 
-  public static void main(String[] args) { launch(); }
+  public static void main(String[] args) {
+//    launch();
+    UserRole role = UserRole.TESTER;
+    User obj = new User("mohamel", "1245", role, "Mohamed");
+  }
 }
