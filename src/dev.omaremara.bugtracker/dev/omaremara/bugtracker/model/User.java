@@ -29,7 +29,7 @@ public class User {
       stmt.setString(2, this.password);
       stmt.setString(3, this.name);
       stmt.setString(4, this.userRole.name());
-      stmt.executeUpdate(sql);
+      int rows = stmt.executeUpdate();
       System.out.println("End");
       stmt.close();
       conn.close();
