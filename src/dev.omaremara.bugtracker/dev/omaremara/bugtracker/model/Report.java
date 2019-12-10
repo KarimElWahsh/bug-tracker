@@ -38,7 +38,6 @@ public class Report {
   public void submit() {
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
-    Statement stmt1 = null;
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
       String sql =
           "INSERT INTO reports(id, title, type, priority, level, description, assignee) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
