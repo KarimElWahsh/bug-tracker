@@ -42,18 +42,13 @@ public class Report {
     Statement stmt1 = null;
     try{
       conn = DriverManager.getConnection(connectionURL);
-      String sql = "INSERT INTO projects(name) VALUES(?)";
-      stmt = conn.prepareStatement(sql);
-      stmt.setString(1, this.project.name);
-      stmt.executeUpdate();
-      sql = "INSERT INTO reports(id, title, type, priority, level, description, assignee, project) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+      String sql = "INSERT INTO reports(id, title, type, priority, level, description, assignee) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
       stmt = conn.prepareStatement(sql);
       stmt.setString(2, this.title);
       stmt.setString(6, this.description);
       stmt.setString(5, this.level.name());
       stmt.setString(4, this.priority.name());
       stmt.setString(3, this.type.name());
-      stmt.setString(8, this.project.name);
       stmt.setString(7, this.assigne.email);
       stmt.setInt(1, this.id);
       stmt.executeUpdate();
