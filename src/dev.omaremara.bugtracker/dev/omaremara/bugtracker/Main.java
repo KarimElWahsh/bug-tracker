@@ -17,10 +17,9 @@ public class Main extends Application {
     stage.setScene(loginScene);
     stage.show();
   }
-
-  public static void main(String[] args) {
+    public static void main (String[]args){
 //    launch();
-    UserRole role = UserRole.TESTER;
-    User obj = new User("mohamel", "1245", role, "Mohamed");
-  }
+      UserRole role = UserRole.TESTER;
+      User obj = new User("mohamel", "1245", role, "Mohamed");
+    }
 }
