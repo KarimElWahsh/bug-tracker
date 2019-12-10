@@ -18,36 +18,18 @@ public class User {
   public void submit() {
     String connectionUrl =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
-    Connection conn = null;
-    PreparedStatement stmt = null;
-    Statement stmt1 = null;
-    try {
-      conn = DriverManager.getConnection(connectionUrl);
+    try (Connection conn = DriverManager.getConnection(connectionUrl)) {
       String sql = "INSERT INTO users VALUES(?, ? , ?, ?)";
-      stmt = conn.prepareStatement(sql);
-      stmt.setString(1, this.email);
-      stmt.setString(2, this.password);
-      stmt.setString(3, this.name);
-      stmt.setString(4, this.userRole.name());
-      int rows = stmt.executeUpdate();
-      System.out.println("End");
-      stmt.close();
-      conn.close();
+      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, this.email);
+        stmt.setString(2, this.password);
+        stmt.setString(3, this.name);
+        stmt.setString(4, this.userRole.name());
+        int rows = stmt.executeUpdate();
+        System.out.println("End");
+      }
     } catch (SQLException se) {
       se.printStackTrace();
-    } finally {
-      try {
-        if (stmt != null)
-          stmt.close();
-      } catch (SQLException se) {
-        se.printStackTrace();
-      }
-      try {
-        if (conn != null)
-          conn.close();
-      } catch (SQLException se) {
-        se.printStackTrace();
-      }
     }
   }
 }

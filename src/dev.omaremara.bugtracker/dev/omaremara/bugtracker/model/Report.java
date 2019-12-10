@@ -17,9 +17,9 @@ public class Report {
   public Project project;
   public User assigne;
 
-  public Report(int id ,String title, String description, ReportLevel level,
-         ReportPriority priority, ReportType type, Project project,
-         User assigne) {
+  public Report(int id, String title, String description, ReportLevel level,
+                ReportPriority priority, ReportType type, Project project,
+                User assigne) {
     this.title = title;
     this.assigne = assigne;
     this.description = description;
@@ -35,41 +35,26 @@ public class Report {
     return this.title;
   }
 
-  public void submit(){
-    String connectionURL = "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
-    Connection conn = null;
-    PreparedStatement stmt = null;
+  public void submit() {
+    String connectionURL =
+        "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     Statement stmt1 = null;
-    try{
-      conn = DriverManager.getConnection(connectionURL);
-      String sql = "INSERT INTO reports(id, title, type, priority, level, description, assignee) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
-      stmt = conn.prepareStatement(sql);
-      stmt.setString(2, this.title);
-      stmt.setString(6, this.description);
-      stmt.setString(5, this.level.name());
-      stmt.setString(4, this.priority.name());
-      stmt.setString(3, this.type.name());
-      stmt.setString(7, this.assigne.email);
-      stmt.setInt(1, this.id);
-      stmt.executeUpdate();
-      stmt.close();
-      conn.close();
-    } catch (SQLException se){
+    try (Connection conn = DriverManager.getConnection(connectionURL)) {
+      String sql =
+          "INSERT INTO reports(id, title, type, priority, level, description, assignee) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(2, this.title);
+        stmt.setString(6, this.description);
+        stmt.setString(5, this.level.name());
+        stmt.setString(4, this.priority.name());
+        stmt.setString(3, this.type.name());
+        stmt.setString(7, this.assigne.email);
+        stmt.setInt(1, this.id);
+        stmt.executeUpdate();
+      }
+
+    } catch (SQLException se) {
       se.printStackTrace();
-    }
-    finally {
-      try {
-        if (stmt != null)
-          stmt.close();
-      } catch (SQLException se){
-        se.printStackTrace();
-      }
-      try {
-        if (conn != null)
-          conn.close();
-      } catch (SQLException se){
-        se.printStackTrace();
-      }
     }
   }
 }
