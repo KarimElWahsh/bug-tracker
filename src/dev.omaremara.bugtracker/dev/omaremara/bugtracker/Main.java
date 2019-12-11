@@ -23,11 +23,11 @@ public class Main extends Application {
     stage.show();
   }
   public static void main(String[] args) {
-    launch();
+    // launch();
     //    trace code to kariem remove this commit
-    //      UserRole role = UserRole.TESTER;
-    //      User obj1 = new User("mohamel", "1245", role, "Mohamed");
-    //      obj1.submit();
+    //   UserRole role = UserRole.TESTER;
+    // User obj1 = new User("mohamel", "1245", role, "Mohamed");
+    // obj1.submit();
     //      ReportLevel level = ReportLevel.USER;
     //      ReportPriority priority = ReportPriority.BLOCKER;
     //      ReportType type = ReportType.BUG;

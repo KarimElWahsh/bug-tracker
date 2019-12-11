@@ -5,6 +5,7 @@ import dev.omaremara.bugtracker.model.ReportLevel;
 import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.view.ReportListView;
+import dev.omaremara.bugtracker.model.Report;
 import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -17,45 +18,27 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class NewReportController {
-  private TextField titleField;
-  private TextArea descriptionField;
-  private Label attachedLabel;
-  private ChoiceBox<ReportType> typeChoiceBox;
-  private ChoiceBox<ReportPriority> priorityChoiceBox;
-  private ChoiceBox<ReportLevel> levelChoiceBox;
-  private ChoiceBox<String> projectChoiceBox;
-  private ChoiceBox<String> assigneeChoiceBox;
-  private Label errorLabel;
+  private int id = 0;
 
-  public NewReportController(TextField titleField, TextArea descriptionField,
-                             Label attachedLabel,
-                             ChoiceBox<ReportType> typeChoiceBox,
-                             ChoiceBox<ReportPriority> priorityChoiceBox,
-                             ChoiceBox<ReportLevel> levelChoiceBox,
-                             ChoiceBox<String> projectChoiceBox,
-                             ChoiceBox<String> assigneeChoiceBox,
-                             Label errorLabel) {
-    this.titleField = titleField;
-    this.descriptionField = descriptionField;
-    this.attachedLabel = attachedLabel;
-    this.typeChoiceBox = typeChoiceBox;
-    this.priorityChoiceBox = priorityChoiceBox;
-    this.levelChoiceBox = levelChoiceBox;
-    this.projectChoiceBox = projectChoiceBox;
-    this.assigneeChoiceBox = assigneeChoiceBox;
-    this.errorLabel = errorLabel;
-  }
-
-  public void submit(ActionEvent e) {
-    Stage stage = Main.primaryStage;
-    Scene reportListScene = new ReportListView().getScene();
-    stage.setScene(reportListScene);
+  public void submit(String title, String description, ReportLevel level,
+                     ReportPriority priority, ReportType type, Project project,
+                     User assigne, Label errorLabel) {
+    try {
+      id++;
+      Report NewReport = new Report(id, title, description, level, priority,
+                                    type, project, assigne) Stage stage =
+          Main.primaryStage;
+      Scene reportListScene = new ReportListView().getScene();
+      stage.setScene(reportListScene);
+    } catch (Exception e) {
+      this.errorLabel.setTgit ext("Error Expected");
+    }
 
     // if (isValidReport) {
     // stage.setScene(scene);
     // }
     // else {
-    // this.errorLabel.setText("Invalid report!");
+    //
     // }
   }
 
