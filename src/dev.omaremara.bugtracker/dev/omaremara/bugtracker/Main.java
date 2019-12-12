@@ -7,6 +7,7 @@ import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.model.User;
 import dev.omaremara.bugtracker.model.UserRole;
+import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import dev.omaremara.bugtracker.view.LoginView;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -23,16 +24,21 @@ public class Main extends Application {
     stage.show();
   }
   public static void main(String[] args) {
-    launch();
+//    launch();
     //    trace code to kariem remove this commit
-    //      UserRole role = UserRole.TESTER;
-    //      User obj1 = new User("mohamel", "1245", role, "Mohamed");
-    //      obj1.submit();
-    //      ReportLevel level = ReportLevel.USER;
-    //      ReportPriority priority = ReportPriority.BLOCKER;
-    //      ReportType type = ReportType.BUG;
-    //      Project project = new Project("project");
-    //      Report obj = new Report(1, "title", "description", level, priority,
-    //      type, project, obj1); obj.submit();
+//          UserRole role = UserRole.TESTER;
+//          User obj1 = new User("mohamel", "1245", role, "Mohamed");
+//          obj1.submit();
+//          ReportLevel level = ReportLevel.USER;
+//          ReportPriority priority = ReportPriority.BLOCKER;
+//          ReportType type = ReportType.BUG;
+//          Project project = new Project("project");
+//          Report obj = new Report(1, "title", "", level, priority,
+//          type, project, obj1);
+//          try {
+//            obj.submit();
+//          } catch(InavliedReportException e){
+//            System.out.println(e.getMessage());
+//          }
   }
 }

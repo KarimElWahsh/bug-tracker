@@ -5,6 +5,7 @@ import dev.omaremara.bugtracker.model.ReportLevel;
 import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.model.User;
+import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import java.sql.*;
 
 public class Report {
@@ -30,12 +31,20 @@ public class Report {
     this.type = type;
   }
 
+  public void validateReport(String blank) throws InavliedReportException{
+    if (blank.isBlank()){
+      throw new InavliedReportException("Empty String");
+    }
+  }
+
   @Override
   public String toString() {
     return this.title;
   }
 
-  public void submit() {
+  public void submit() throws InavliedReportException{
+    validateReport(this.title);
+    validateReport(this.description);
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
@@ -56,4 +65,12 @@ public class Report {
       se.printStackTrace();
     }
   }
+
+  // gitReportsCounet : throw database exception
+
+  // git from resulset : throw database exception login exceptionn :
+
+  // gitAllReports : retreive array list of report t: throw databaase exception and login exception
+
+
 }
