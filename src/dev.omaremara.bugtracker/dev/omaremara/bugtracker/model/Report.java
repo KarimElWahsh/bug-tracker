@@ -6,6 +6,8 @@ import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.model.User;
 import dev.omaremara.bugtracker.model.exception.InavliedReportException;
+import dev.omaremara.bugtracker.model.exception.LoginException;
+import dev.omaremara.bugtracker.model.exception.DataBaseException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class Report {
     }
   }
 
-  private static User getFromLogin(String uiName) {
+  private static User getFromLogin(String uiName) throws LoginException, DataBaseException {
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     User user = null;
@@ -77,13 +79,16 @@ public class Report {
       try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setString(1, uiName);
         try (ResultSet rs = stmt.executeQuery()) {
+          if (!rs.isBeforeFirst()) {
+            throw new LoginException("No user exist with this email!");
+          }
           rs.next();
           user = new User(rs.getString("email"), rs.getString("passowrd"),
                           UserRole.valueOf(rs.getString("role")),
                           rs.getString("name"));
           System.out.println("inUsers");
         } catch (SQLException se) {
-          se.printStackTrace();
+            throw new DataBaseException("Email Not Found In users", se);
         }
 
       } catch (SQLException se) {
@@ -95,7 +100,8 @@ public class Report {
     return user;
   }
 
-  public static List<Report> returnAllReports() {
+  public static List<Report> returnAllReports()
+      throws LoginException, DataBaseException {
     List<Report> reports = new ArrayList<Report>();
     System.out.println("In List");
     String connectionURL =
@@ -119,7 +125,7 @@ public class Report {
             reports.add(reportInfo);
           }
         } catch (SQLException se) {
-          se.printStackTrace();
+            throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
         se.printStackTrace();
@@ -127,15 +133,16 @@ public class Report {
     } catch (SQLException se) {
       se.printStackTrace();
     }
+
     System.out.println(reports);
     return reports;
   }
 
-  public static int getCountOfReport() {
+  public static int getCountOfReport() throws DataBaseException{
     int count = 0;
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
-  try (Connection conn = DriverManager.getConnection(connectionURL)) {
+    try (Connection conn = DriverManager.getConnection(connectionURL)) {
       String sql = "SELECT COUNT(id) AS 'COUNT(id)' FROM reports";
       try (Statement stmt = conn.createStatement()) {
         try (ResultSet rs = stmt.executeQuery(sql)) {
@@ -143,16 +150,16 @@ public class Report {
           rs.next();
           count = rs.getInt("COUNT(id)");
         } catch (SQLException se) {
-          se.printStackTrace();
+            throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
-        se.printStackTrace();
+          se.printStackTrace();
       }
-  }catch (SQLException se) {
+    } catch (SQLException se) {
       se.printStackTrace();
-  }
-  System.out.println(count);
-  return count;
+    }
+    System.out.println(count);
+    return count;
   }
 }
 
