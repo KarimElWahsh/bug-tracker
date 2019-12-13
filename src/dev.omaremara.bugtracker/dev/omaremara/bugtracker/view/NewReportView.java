@@ -1,10 +1,13 @@
 package dev.omaremara.bugtracker.view;
 
 import dev.omaremara.bugtracker.controller.NewReportController;
+import dev.omaremara.bugtracker.model.Project;
 import dev.omaremara.bugtracker.model.ReportLevel;
 import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
+import dev.omaremara.bugtracker.model.User;
 import dev.omaremara.bugtracker.view.View;
+import java.util.List;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +22,11 @@ import javafx.scene.paint.Color;
 
 public class NewReportView implements View {
   public Scene getScene() {
+    NewReportController controller = new NewReportController();
+
+    Label errorLabel = new Label();
+    errorLabel.setTextFill(Color.RED);
+
     Label headerLabel = new Label("New Report:");
     headerLabel.setStyle("-fx-font-size : 24px;");
     GridPane.setHalignment(headerLabel, HPos.LEFT);
@@ -41,7 +49,7 @@ public class NewReportView implements View {
 
     Label priorityLabel = new Label("Priority:");
     ChoiceBox<ReportPriority> priorityChoiceBox =
-        new ChoiceBox<ReportPriority>();
+            new ChoiceBox<ReportPriority>();
     priorityChoiceBox.getItems().addAll(ReportPriority.values());
     priorityChoiceBox.setValue(ReportPriority.TRIVIAL);
 
@@ -51,15 +59,16 @@ public class NewReportView implements View {
     levelChoiceBox.setValue(ReportLevel.USER);
 
     Label projectLabel = new Label("Project:");
-    ChoiceBox<String> projectChoiceBox = new ChoiceBox<String>();
-    projectChoiceBox.getItems().addAll("Project 1", "Project 2", "Project 3");
-    projectChoiceBox.setValue("Project 1");
+    ChoiceBox<Project> projectChoiceBox = new ChoiceBox<Project>();
+    List<Project> projects = controller.getAllProjects(errorLabel);
+    projectChoiceBox.getItems().addAll(projects);
+    projectChoiceBox.setValue(projects.get(0));
 
     Label assigneeLabel = new Label("Assignee:");
-    ChoiceBox<String> assigneeChoiceBox = new ChoiceBox<String>();
-    assigneeChoiceBox.getItems().addAll("Assignee 1", "Assignee 2",
-                                        "Assignee 3");
-    assigneeChoiceBox.setValue("Assignee 1");
+    ChoiceBox<User> assigneeChoiceBox = new ChoiceBox<User>();
+    List<User> developers = controller.getAllDevelopers(errorLabel);
+    assigneeChoiceBox.getItems().addAll(developers);
+    assigneeChoiceBox.setValue(developers.get(0));
 
     Button submitButton = new Button("Submit");
     submitButton.setDefaultButton(true);
@@ -68,17 +77,6 @@ public class NewReportView implements View {
 
     HBox actionRow = new HBox(10, cancelButton, submitButton);
     actionRow.setAlignment(Pos.BOTTOM_RIGHT);
-
-    Label errorLabel = new Label();
-    errorLabel.setTextFill(Color.RED);
-
-    NewReportController controller = new NewReportController(
-        titleField, descriptionField, attachedLabel, typeChoiceBox,
-        priorityChoiceBox, levelChoiceBox, projectChoiceBox, assigneeChoiceBox,
-        errorLabel);
-    attachButton.setOnAction(e -> controller.attach(e));
-    submitButton.setOnAction(e -> controller.submit(e));
-    cancelButton.setOnAction(e -> controller.cancel(e));
 
     GridPane grid = new GridPane();
     grid.setAlignment(Pos.CENTER);
@@ -112,6 +110,17 @@ public class NewReportView implements View {
 
     grid.add(actionRow, 1, 9);
     grid.add(errorLabel, 0, 10, 2, 1);
+
+    attachButton.setOnAction(e -> controller.attach(attachedLabel));
+    cancelButton.setOnAction(e -> controller.cancel());
+    submitButton.setOnAction(
+            e
+                    -> controller.submit(
+                    titleField.getText(), descriptionField.getText(),
+                    typeChoiceBox.getValue(), priorityChoiceBox.getValue(),
+                    levelChoiceBox.getValue(), projectChoiceBox.getValue(),
+                    assigneeChoiceBox.getValue(), errorLabel));
+
     return new Scene(grid);
   }
 }

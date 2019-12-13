@@ -13,6 +13,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+  private User user;
   public static Stage primaryStage;
 
   @Override
