@@ -1,2 +1,2 @@
--p mods;C:/jvm/javafx-sdk-13/lib;C:\jvm\mssql-jdbc-13
+-p mods;C:/jvm/javafx-sdk-13/lib;C:\jvm\mssql-jdbc-13;C:\jvm\mailactivation
 -m dev.omaremara.bugtracker/dev.omaremara.bugtracker.Main
