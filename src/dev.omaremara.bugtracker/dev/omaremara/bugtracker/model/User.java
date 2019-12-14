@@ -122,7 +122,7 @@ public class User {
     }
   }
   // update user
-  public void updateUser(User updateUser, String email) throws DataBaseException {
+  public void updateUser(User updateUser) throws DataBaseException {
     String connectionUrl =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionUrl)) {
@@ -132,7 +132,7 @@ public class User {
         stmt.setString(2, updateUser.password);
         stmt.setString(3, updateUser.userRole.name());
         stmt.setString(4, updateUser.name);
-        stmt.setString(5, email);
+        stmt.setString(5, this.email);
         stmt.executeUpdate();
       } catch (SQLException se) {
         throw new DataBaseException("CAN NOT UPDATE USER", se);

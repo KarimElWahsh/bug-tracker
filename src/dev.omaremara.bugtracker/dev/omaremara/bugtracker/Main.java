@@ -16,6 +16,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
+import dev.omaremara.bugtracker.model.Status;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Main extends Application {
     private User user;
@@ -33,33 +37,35 @@ public class Main extends Application {
 //    launch();
         UserRole role = UserRole.DEVELOPER;
         User obj1 = new User("mohamed", "1245", role, "Mohamed");
-//        obj1.submit();
-//          obj1.getAllDevelopers();
-//        ReportLevel level = ReportLevel.USER;
-//        ReportPriority priority = ReportPriority.BLOCKER;
-//        ReportType type = ReportType.BUG;
-//        Project project = new Project("project");
-//        Report obj = new Report(1, "title", "project", level, priority,
-//                type, obj1);
-//          try {
-//            obj.submit();
-//          } catch(InavliedReportException e){
-//            System.out.println(e.getMessage());
-//          }
-//    List<Report> reports = new ArrayList<Report>();
-//        try {
-//
-//            obj.getCountOfReport();
-//        } catch (DataBaseException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        User obj2 = new User("mohamed", "1245", role, "Mohamed");
-        try{
-            obj1.updateUser(obj1, "yes");
+        obj1.submit();
+          obj1.getAllDevelopers();
+        ReportLevel level = ReportLevel.USER;
+        ReportPriority priority = ReportPriority.BLOCKER;
+        ReportType type = ReportType.BUG;
+        Project project = new Project("project");
+        LocalDateTime now = LocalDateTime.now();
+        Status status = Status.ON;
+        Report obj = new Report(1, "title", "project", level, priority,
+                type, obj1, now, status);
+          try {
+            obj.submit();
+          } catch(InavliedReportException e){
+            System.out.println(e.getMessage());
+          }
+    List<Report> reports = new ArrayList<Report>();
+        try {
 
-        } catch (DataBaseException exception) {
-            System.out.println(exception.getMessage());
+            obj.returnAllReports();
+        } catch (DataBaseException | LoginException e) {
+            System.out.println(e.getMessage());
         }
+//        User obj2 = new User("mohamed", "1245", role, "Mohamed");
+//        try{
+//            obj1.updateUser(new User("good", "1245", role, "Mohamed"));
+//
+//        } catch (DataBaseException exception) {
+//            System.out.println(exception.getMessage());
+//        }
 //        Project project = new Project("project1");
 //        try {
 //            project.getAllProjects();
