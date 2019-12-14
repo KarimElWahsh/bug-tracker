@@ -22,7 +22,7 @@ public class LoginController {
  // name ? //userRole ?
   public void login(String email, String password, Label errorLabel) {
     try {
-      Main.user = User.getFromLogin(email, password); //mohamed should make getFromLogin method
+      Main.user = User.getFromLogin(email, password);
         if (User.isValidLogin(email)) {
               Stage stage = Main.primaryStage;
               Scene reportListScene = new ReportListView().getScene();

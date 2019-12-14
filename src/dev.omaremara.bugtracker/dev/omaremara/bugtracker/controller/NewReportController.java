@@ -8,6 +8,7 @@ import dev.omaremara.bugtracker.view.ReportListView;
 import dev.omaremara.bugtracker.model.Report;
 import dev.omaremara.bugtracker.model.Project;
 import dev.omaremara.bugtracker.model.User;
+import dev.omaremara.bugtracker.controller.Email;
 import java.io.File;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
@@ -18,10 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
-import java.util.*;
-import javax.mail.*;
-import javax.mail.internet.*;
-import javax.activation.*;
+
 
 public class NewReportController {
   private Label errorLabel;
@@ -34,20 +32,14 @@ public class NewReportController {
         id = Report.getId(); // get last Report ID
         id++;
       Report NewReport = new Report(id,title, description, level, priority, type, project, assigne);
+      Email NE = new Email( /*devep email*/, title , description);
+      Email.SendEmail();
       Stage stage =Main.primaryStage;
       Scene reportListScene = new ReportListView().getScene();
       stage.setScene(reportListScene);
-    } catch (Exception exception) {
+    } catch (DataBase exception) {
       this.errorLabel.setText(exception.getMessage());
     }
-    // method searching for Report
-    // if (Report.isValidReport) {
-    // stage.setScene(scene);
-    // }
-    // else {
-    //
-    // }
-  }
 
   public void attach(Label attachedLabel) {
     Stage stage = Main.primaryStage;
@@ -84,40 +76,5 @@ public class NewReportController {
       errorLabel.setText(exception.getMessage());
     }return new ArrayList<User>();
   }
-  public static void SendEmail (String email){
-
-    String to = email;
-
-    String from = "karimashraf@karimweb.mydomain";
-
-    String host = "mail.hmailserver.com";
-
-
-    Properties properties = System.getProperties();
-
-    properties.setProperty("mail.smtp.host", host);
-
-    Session session = Session.getDefaultInstance(properties);
-
-    try {
-
-      MimeMessage message = new MimeMessage(session);
-
-      message.setFrom(new InternetAddress(from));
-
-
-      message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-
-
-      message.setSubject("Bug Details");
-
-
-      message.setText("This is actual message");
-
-
-      Transport.send(message);
-    } catch (MessagingException mex) {
-      mex.printStackTrace();
-    }
-  }
 }
+
