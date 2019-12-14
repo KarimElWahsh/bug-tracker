@@ -36,26 +36,27 @@ public class Main extends Application {
     public static void main(String[] args) {
 //    launch();
         UserRole role = UserRole.DEVELOPER;
-        User obj1 = new User("mohamed", "1245", role, "Mohamed");
-        obj1.submit();
-          obj1.getAllDevelopers();
+        User obj1 = new User("q", "1245", role, "Mohamed");
+//        obj1.submit();
+//          obj1.getAllDevelopers();
         ReportLevel level = ReportLevel.USER;
         ReportPriority priority = ReportPriority.BLOCKER;
         ReportType type = ReportType.BUG;
         Project project = new Project("project");
         LocalDateTime now = LocalDateTime.now();
-        Status status = Status.ON;
+        Status status = Status.OFF;
         Report obj = new Report(1, "title", "project", level, priority,
                 type, obj1, now, status);
-          try {
-            obj.submit();
-          } catch(InavliedReportException e){
-            System.out.println(e.getMessage());
-          }
+//          try {
+//            obj.submit();
+//          } catch(InavliedReportException e){
+//            System.out.println(e.getMessage());
+//          }
+          status = Status.OFF;
     List<Report> reports = new ArrayList<Report>();
         try {
 
-            obj.returnAllReports();
+            obj.returnAllReports(status);
         } catch (DataBaseException | LoginException e) {
             System.out.println(e.getMessage());
         }

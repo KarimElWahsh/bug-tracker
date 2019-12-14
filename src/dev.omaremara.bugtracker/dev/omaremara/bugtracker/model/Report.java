@@ -10,9 +10,9 @@ import dev.omaremara.bugtracker.model.exception.DataBaseException;
 import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import dev.omaremara.bugtracker.model.exception.LoginException;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.time.LocalDateTime;
 
 public class Report {
   public int id;
@@ -58,7 +58,7 @@ public class Report {
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
       String sql =
-          "INSERT INTO reports(id, title, type, priority, level, description, assignee, project, status, date) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, DEFAULT)";
+          "INSERT INTO reports(id, title, type, priority, level, description, assignee, project, status, date) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setString(2, this.title);
         stmt.setString(6, this.description);
@@ -67,9 +67,9 @@ public class Report {
         stmt.setString(3, this.type.name());
         stmt.setString(7, this.assigne.email);
         stmt.setInt(1, this.id);
-        stmt.setString(8, "project2");
+        stmt.setString(8, "project1");
         stmt.setString(9, this.status.name());
-
+        stmt.setObject(10, this.dateTime);
         stmt.executeUpdate();
       } catch (SQLException se) {
         se.printStackTrace();
@@ -141,14 +141,12 @@ public class Report {
       throw new DataBaseException("No Reports Found", se);
     }
 
-    System.out.println(reports);
     return reports;
   }
 
   public static List<Report> returnAllReports(Status status)
       throws LoginException, DataBaseException {
     List<Report> reports = new ArrayList<Report>();
-    System.out.println("In List");
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
@@ -179,7 +177,6 @@ public class Report {
       throw new DataBaseException("No Reports Found", se);
     }
 
-    System.out.println(reports);
     return reports;
   }
 
