@@ -51,7 +51,7 @@ public class ReportListView implements View {
 
       String infoString = "#" + report.id + " opened on " +
               report.date.format(DateTimeFormatter.ISO_LOCAL_DATE) +
-              " By " + report.assignee.name; // Report > report
+              " By " + report.assignee.name;
       Label infoLabel = new Label(infoString);
       infoLabel.setTextFill(Color.GREY);
 
@@ -61,6 +61,8 @@ public class ReportListView implements View {
 
       Button viewReportButton = new Button("View Report");
       GridPane.setHalignment(viewReportButton, HPos.RIGHT);
+
+      viewReportButton.setOnAction(e -> controller.viewReport(report));
 
       Separator separator = new Separator(Orientation.HORIZONTAL);
       separator.setPadding(new Insets(10, 0, 10, 0));
