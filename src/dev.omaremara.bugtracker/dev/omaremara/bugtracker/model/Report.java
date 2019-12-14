@@ -92,10 +92,10 @@ public class Report {
         }
 
       } catch (SQLException se) {
-        se.printStackTrace();
+        throw new DataBaseException("Email Not Found In users", se);
       }
     } catch (SQLException se) {
-      se.printStackTrace();
+      throw new DataBaseException("Email Not Found In users", se);
     }
     return user;
   }
@@ -128,10 +128,10 @@ public class Report {
             throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
-        se.printStackTrace();
+        throw new DataBaseException("No Reports Found", se);
       }
     } catch (SQLException se) {
-      se.printStackTrace();
+      throw new DataBaseException("No Reports Found", se);
     }
 
     System.out.println(reports);
@@ -153,10 +153,10 @@ public class Report {
             throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
-          se.printStackTrace();
+        throw new DataBaseException("No Reports Found", se);
       }
     } catch (SQLException se) {
-      se.printStackTrace();
+      throw new DataBaseException("No Reports Found", se);
     }
     System.out.println(count);
     return count;

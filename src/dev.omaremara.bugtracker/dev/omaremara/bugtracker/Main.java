@@ -31,28 +31,33 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 //    launch();
-        //    trace code to kariem remove this commit
         UserRole role = UserRole.DEVELOPER;
         User obj1 = new User("yes", "1245", role, "Mohamed");
-        obj1.submit();
+//        obj1.submit();
 //          obj1.getAllDevelopers();
-        ReportLevel level = ReportLevel.USER;
-        ReportPriority priority = ReportPriority.BLOCKER;
-        ReportType type = ReportType.BUG;
-        Project project = new Project("project");
-        Report obj = new Report(1, "title", "project", level, priority,
-                type, obj1);
+//        ReportLevel level = ReportLevel.USER;
+//        ReportPriority priority = ReportPriority.BLOCKER;
+//        ReportType type = ReportType.BUG;
+//        Project project = new Project("project");
+//        Report obj = new Report(1, "title", "project", level, priority,
+//                type, obj1);
 //          try {
 //            obj.submit();
 //          } catch(InavliedReportException e){
 //            System.out.println(e.getMessage());
 //          }
 //    List<Report> reports = new ArrayList<Report>();
-        try {
+//        try {
+//
+//            obj.getCountOfReport();
+//        } catch (DataBaseException e) {
+//            System.out.println(e.getMessage());
+//        }
+        try{
+            obj1.getFromLogin("yes", "1");
 
-            obj.getCountOfReport();
-        } catch (DataBaseException e) {
-            System.out.println(e.getMessage());
+        } catch (LoginException | DataBaseException exception) {
+            System.out.println(exception.getMessage());
         }
     }
 }

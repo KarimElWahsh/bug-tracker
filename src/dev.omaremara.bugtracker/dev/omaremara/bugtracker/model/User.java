@@ -4,6 +4,8 @@ import dev.omaremara.bugtracker.model.UserRole;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import dev.omaremara.bugtracker.model.exception.LoginException;
+import dev.omaremara.bugtracker.model.exception.DataBaseException;
 
 public class User {
   public String email;
@@ -17,6 +19,7 @@ public class User {
     this.userRole = userRole;
     this.name = name;
   }
+
   public void submit() {
     String connectionUrl =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
@@ -38,7 +41,7 @@ public class User {
   }
 
   @Override
-  public String toString(){
+  public String toString() {
     return this.email;
   }
 
@@ -66,5 +69,55 @@ public class User {
       se.printStackTrace();
     }
     return Alldevelopers;
+  }
+
+  public static User getFromLogin(String email, String password)
+      throws LoginException, DataBaseException {
+    String connectionUrl =
+        "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
+    User user = null;
+    try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+      String sql = "SELECT * FROM users WHERE email = ? AND passowrd = ?";
+      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        stmt.setString(2, password);
+        boolean ret = stmt.execute();
+        if (ret == false){
+          throw new LoginException("USER NOT FOUND");
+        }
+        try (ResultSet rs = stmt.executeQuery()) {
+          user = new User(rs.getString("email"), rs.getString("passowrd"),
+                          UserRole.valueOf(rs.getString("role")),
+                          rs.getString("name"));
+        } catch (SQLException se) {
+          throw new DataBaseException("USER NOT FOUND", se);
+        }
+      } catch (SQLException se) {
+        throw new DataBaseException("USER NOT FOUND", se);
+      }
+    } catch (SQLException se) {
+      throw new DataBaseException("USER NOT FOUND", se);
+    }
+    return user;
+  }
+  public static boolean isValidLogin(String email)
+          throws LoginException, DataBaseException {
+    String connectionUrl =
+            "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
+    try (Connection conn = DriverManager.getConnection(connectionUrl)) {
+      String sql = "SELECT * FROM users WHERE email = ?";
+      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, email);
+        boolean rs = stmt.execute();
+        if(rs == false){
+          throw new LoginException("USER NOT FOUND");
+        }
+      } catch (SQLException se) {
+        throw new DataBaseException("USER NOT FOUND", se);
+      }
+    } catch (SQLException se) {
+      throw new DataBaseException("USER NOT FOUND", se);
+    }
+    return true;
   }
 }
