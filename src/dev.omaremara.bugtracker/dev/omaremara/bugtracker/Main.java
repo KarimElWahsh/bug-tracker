@@ -31,8 +31,8 @@ public class Main extends Application {
 
     public static void main(String[] args) {
 //    launch();
-//        UserRole role = UserRole.DEVELOPER;
-//        User obj1 = new User("yes", "1245", role, "Mohamed");
+        UserRole role = UserRole.DEVELOPER;
+        User obj1 = new User("mohamed", "1245", role, "Mohamed");
 //        obj1.submit();
 //          obj1.getAllDevelopers();
 //        ReportLevel level = ReportLevel.USER;
@@ -53,17 +53,18 @@ public class Main extends Application {
 //        } catch (DataBaseException e) {
 //            System.out.println(e.getMessage());
 //        }
-//        try{
-//            obj1.getFromLogin("yes", "1");
-//
-//        } catch (LoginException | DataBaseException exception) {
-//            System.out.println(exception.getMessage());
-//        }
-        Project project = new Project("project1");
-        try {
-            project.getAllProjects();
-        } catch (DataBaseException exception){
+//        User obj2 = new User("mohamed", "1245", role, "Mohamed");
+        try{
+            obj1.updateUser(obj1, "yes");
+
+        } catch (DataBaseException exception) {
             System.out.println(exception.getMessage());
         }
+//        Project project = new Project("project1");
+//        try {
+//            project.getAllProjects();
+//        } catch (DataBaseException exception){
+//            System.out.println(exception.getMessage());
+//        }
     }
 }

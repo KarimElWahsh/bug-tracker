@@ -5,9 +5,9 @@ import dev.omaremara.bugtracker.model.ReportLevel;
 import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.model.User;
+import dev.omaremara.bugtracker.model.exception.DataBaseException;
 import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import dev.omaremara.bugtracker.model.exception.LoginException;
-import dev.omaremara.bugtracker.model.exception.DataBaseException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +70,8 @@ public class Report {
     }
   }
 
-  private static User getFromLogin(String uiName) throws LoginException, DataBaseException {
+  private static User getFromLogin(String uiName)
+      throws LoginException, DataBaseException {
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     User user = null;
@@ -83,12 +84,11 @@ public class Report {
             throw new LoginException("No user exist with this email!");
           }
           rs.next();
-          user = new User(rs.getString("email"), rs.getString("passowrd"),
+          user = new User(rs.getString("email"), rs.getString("password"),
                           UserRole.valueOf(rs.getString("role")),
                           rs.getString("name"));
-          System.out.println("inUsers");
         } catch (SQLException se) {
-            throw new DataBaseException("Email Not Found In users", se);
+          throw new DataBaseException("Email Not Found In users", se);
         }
 
       } catch (SQLException se) {
@@ -125,7 +125,7 @@ public class Report {
             reports.add(reportInfo);
           }
         } catch (SQLException se) {
-            throw new DataBaseException("No Reports Found", se);
+          throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
         throw new DataBaseException("No Reports Found", se);
@@ -138,7 +138,7 @@ public class Report {
     return reports;
   }
 
-  public static int getCountOfReport() throws DataBaseException{
+  public static int getCountOfReport() throws DataBaseException {
     int count = 0;
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
@@ -150,7 +150,7 @@ public class Report {
           rs.next();
           count = rs.getInt("COUNT(id)");
         } catch (SQLException se) {
-            throw new DataBaseException("No Reports Found", se);
+          throw new DataBaseException("No Reports Found", se);
         }
       } catch (SQLException se) {
         throw new DataBaseException("No Reports Found", se);

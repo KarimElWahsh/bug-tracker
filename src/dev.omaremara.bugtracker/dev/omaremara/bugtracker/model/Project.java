@@ -34,6 +34,6 @@ public class Project {
       throw new DataBaseException("NO PROJECTS FOUND", se);
     }
     System.out.println(projectList);
-    return  projectList;
+    return projectList;
   }
 }
