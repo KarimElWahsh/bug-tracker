@@ -49,7 +49,7 @@ public class NewReportView implements View {
 
     Label priorityLabel = new Label("Priority:");
     ChoiceBox<ReportPriority> priorityChoiceBox =
-            new ChoiceBox<ReportPriority>();
+        new ChoiceBox<ReportPriority>();
     priorityChoiceBox.getItems().addAll(ReportPriority.values());
     priorityChoiceBox.setValue(ReportPriority.TRIVIAL);
 
@@ -113,13 +113,12 @@ public class NewReportView implements View {
 
     attachButton.setOnAction(e -> controller.attach(attachedLabel));
     cancelButton.setOnAction(e -> controller.cancel());
-    submitButton.setOnAction(
-            e
-                    -> controller.submit(
-                    titleField.getText(), descriptionField.getText(),
-                    typeChoiceBox.getValue(), priorityChoiceBox.getValue(),
-                    levelChoiceBox.getValue(), projectChoiceBox.getValue(),
-                    assigneeChoiceBox.getValue(), errorLabel));
+    submitButton.setOnAction(e -> {
+      controller.submit(titleField.getText(), descriptionField.getText(),
+                        typeChoiceBox.getValue(), priorityChoiceBox.getValue(),
+                        levelChoiceBox.getValue(), projectChoiceBox.getValue(),
+                        assigneeChoiceBox.getValue(), errorLabel);
+    });
 
     return new Scene(grid);
   }
