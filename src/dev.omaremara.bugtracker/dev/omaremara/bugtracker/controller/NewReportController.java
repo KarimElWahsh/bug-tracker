@@ -32,7 +32,7 @@ public class NewReportController {
         id = Report.getId(); // get last Report ID
         id++;
       Report NewReport = new Report(id,title, description, level, priority, type, project, assigne);
-      Email NE = new Email( /*devep email*/, title , description);
+      Email NE = new Email( gfhhh, title , description);
       Email.SendEmail();
       Stage stage =Main.primaryStage;
       Scene reportListScene = new ReportListView().getScene();
@@ -40,8 +40,9 @@ public class NewReportController {
     } catch (DataBase exception) {
       this.errorLabel.setText(exception.getMessage());
     }
+                     }
 
-  public void attach(Label attachedLabel) {
+    public void attach(Label attachedLabel) {
     Stage stage = Main.primaryStage;
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Attach Screenshot");
