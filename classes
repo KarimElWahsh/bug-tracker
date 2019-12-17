@@ -20,7 +20,7 @@ src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/Report.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/Status.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/exception/LoginException.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/exception/DataBaseException.java
-src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/exception/InvaliedReportException.java
+src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/model/exception/InavliedReportException.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/LoginController.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/NewReportController.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/ReportListControlleR.java
