@@ -4,8 +4,8 @@ import dev.omaremara.bugtracker.model.UserRole;
 import dev.omaremara.bugtracker.model.exception.DataBaseException;
 import dev.omaremara.bugtracker.model.exception.LoginException;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 
 public class User {
   public String email;
@@ -44,14 +44,21 @@ public class User {
     return this.email;
   }
 
-  public static List<User> getAllDevelopers() {
+  public static List<User> getAllDevelopers(UserRole uRole) throws DataBaseException{
     List<User> Alldevelopers = new ArrayList<User>();
     String connectionUrl =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
+    StringBuilder  sql = new StringBuilder ("SELECT * FROM users");
     try (Connection conn = DriverManager.getConnection(connectionUrl)) {
-      String sql = "SELECT * FROM users WHERE role = 'DEVELOPER'";
       try (Statement stmt = conn.createStatement()) {
-        try (ResultSet rs = stmt.executeQuery(sql)) {
+        UserRole userRole1 = UserRole.DEVELOPER;
+        System.out.println(userRole1);
+        System.out.println(uRole);
+          if (userRole1 == uRole){
+            System.out.println("in role");
+            sql.append(" WHERE role = 'DEVELOPER'");
+          }
+        try (ResultSet rs = stmt.executeQuery(sql.toString())) {
           while (rs.next()) {
             User developer = new User(
                 rs.getString("email"), rs.getString("password"),
@@ -59,14 +66,15 @@ public class User {
             Alldevelopers.add(developer);
           }
         } catch (SQLException se) {
-          se.printStackTrace();
-        }
-      } catch (SQLException se) {
-        se.printStackTrace();
+        throw new DataBaseException("Cannot get users", se);
       }
-    } catch (SQLException se) {
-      se.printStackTrace();
-    }
+      }  catch (SQLException se) {
+        throw new DataBaseException("Cannot get users", se);
+      }
+    }  catch (SQLException se) {
+        throw new DataBaseException("Cannot get users", se);
+      }
+    System.out.println(Alldevelopers);
     return Alldevelopers;
   }
 
@@ -140,5 +148,33 @@ public class User {
     } catch (SQLException se) {
       throw new DataBaseException("CAN NOT UPDATE USER", se);
     }
+  }
+  public static HashMap<User, Integer> getUsersStats()
+          throws DataBaseException {
+    String connectionURL =
+            "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
+    HashMap<User, Integer> hm = new HashMap<User, Integer>();
+    try (Connection conn = DriverManager.getConnection(connectionURL)) {
+      String sql =
+              "SELECT email, password, role, name,  COUNT(*) AS COUNT   FROM users INNER JOIN reports on email = author OR (email = assignee and status = 'CLOSED') GROUP BY email, password, role, name";
+      try (Statement stmt = conn.createStatement()) {
+        try (ResultSet rs = stmt.executeQuery(sql)) {
+          while (rs.next()) {
+            User user = new User(
+                    rs.getString("email"), rs.getString("password"),
+                    UserRole.valueOf(rs.getString("role")), rs.getString("name"));
+            hm.put(user, rs.getInt("COUNT"));
+          }
+        } catch (SQLException se) {
+          throw new DataBaseException("Cannot get user stats", se);
+        }
+      } catch (SQLException se) {
+        throw new DataBaseException("Cannot get user stats", se);
+      }
+    } catch (SQLException se) {
+      throw new DataBaseException("Cannot get user stats", se);
+    }
+
+    return hm;
   }
 }

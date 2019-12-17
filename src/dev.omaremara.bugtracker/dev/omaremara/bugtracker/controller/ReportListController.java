@@ -12,12 +12,12 @@ public class ReportListController {
   private Label errorlabel;
   // variable Report
   // attached Label
-  public void newReport(ActionEvent e) {
+  public  static void newReport(ActionEvent e) {
     Stage stage = Main.primaryStage;
     Scene newReportScene = new NewReportView().getScene();
     stage.setScene(newReportScene);
   }
-  public void logOut() {
+  public static void logOut() {
     Stage stage = Main.primaryStage;
     Scene loginScene = new LoginView().getScene();
     stage.setScene(loginScene);
@@ -29,6 +29,19 @@ public class ReportListController {
     errorlabel.setText(exception.getMessage());
   }
   return new ArrayList<Report>();
+  }
+  public static void administer()
+  {
+    Stage stage = Main.primaryStage;
+    Scene administerScene = new AdministrationView().getScene();
+    stage.setScene(administerScene);
+  }
+  public static void insights()
+  {
+        Stage stage = Main.primaryStage;
+    Scene insightsScene = new InsightsView().getScene();
+    stage.setScene(insightsScene);
+
   }
 
 }

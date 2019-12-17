@@ -11,6 +11,7 @@ import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import dev.omaremara.bugtracker.model.exception.LoginException;
 import java.sql.*;
 import java.time.LocalDateTime;
+import java.util.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +26,11 @@ public class Report {
   public User assigne;
   public Status status;
   public LocalDateTime dateTime;
+  public User author;
 
   public Report(int id, String title, String description, ReportLevel level,
                 ReportPriority priority, ReportType type, User assigne,
-                LocalDateTime dateTime, Status status) {
+                LocalDateTime dateTime, Status status, User author) {
     this.title = title;
     this.assigne = assigne;
     this.description = description;
@@ -38,6 +40,7 @@ public class Report {
     this.type = type;
     this.status = status;
     this.dateTime = dateTime;
+    this.author = author;
   }
 
   public void validateReport(String blank) throws InavliedReportException {
@@ -58,7 +61,7 @@ public class Report {
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
       String sql =
-          "INSERT INTO reports(id, title, type, priority, level, description, assignee, project, status, date) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+          "INSERT INTO reports(id, title, type, priority, level, description, assignee, project, status, date, author) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
       try (PreparedStatement stmt = conn.prepareStatement(sql)) {
         stmt.setString(2, this.title);
         stmt.setString(6, this.description);
@@ -70,6 +73,7 @@ public class Report {
         stmt.setString(8, "project1");
         stmt.setString(9, this.status.name());
         stmt.setObject(10, this.dateTime);
+        stmt.setString(11, this.author.email);
         stmt.executeUpdate();
       } catch (SQLException se) {
         se.printStackTrace();
@@ -109,26 +113,45 @@ public class Report {
     return user;
   }
 
-  public static List<Report> returnAllReports()
+  public static List<Report> getAllReports(Status status, String assignee)
       throws LoginException, DataBaseException {
     List<Report> reports = new ArrayList<Report>();
     String connectionURL =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
+    StringBuilder sql = new StringBuilder("SELECT * FROM reports");
     try (Connection conn = DriverManager.getConnection(connectionURL)) {
-      String sql = "SELECT * FROM reports";
-      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+      if (status != null && assignee == null) {
+        sql.append(" WHERE status = ?");
+        System.out.println(sql.toString());
+      } else if (assignee != null && status == null) {
+        sql.append(" WHERE assignee = ?");
+        System.out.println(sql.toString());
+      } else if (assignee != null && status != null) {
+        sql.append(" WHERE assignee = ? AND status = ?");
+        System.out.println(sql.toString());
+      }
+      try (PreparedStatement stmt = conn.prepareStatement(sql.toString())) {
+        if (status != null && assignee == null) {
+          stmt.setString(1, status.name());
+        } else if (assignee != null && status == null) {
+          stmt.setString(1, status.name());
+        } else if (assignee != null && status != null) {
+          stmt.setString(1, assignee);
+          stmt.setString(2, status.name());
+        }
         try (ResultSet rs = stmt.executeQuery()) {
           while (rs.next()) {
             String uiEmail = rs.getString("assignee");
-            User userInfo = getFromLogin(uiEmail);
-            Report reportInfo =
-                new Report(rs.getInt("id"), rs.getString("title"),
-                           rs.getString("description"),
-                           ReportLevel.valueOf(rs.getString("level")),
-                           ReportPriority.valueOf(rs.getString("priority")),
-                           ReportType.valueOf(rs.getString("type")), userInfo,
-                           rs.getObject("date", LocalDateTime.class),
-                           Status.valueOf(rs.getString("status")));
+            User userInfoAss = getFromLogin(uiEmail);
+            User userInfoAuth = getFromLogin(uiEmail);
+            Report reportInfo = new Report(
+                rs.getInt("id"), rs.getString("title"),
+                rs.getString("description"),
+                ReportLevel.valueOf(rs.getString("level")),
+                ReportPriority.valueOf(rs.getString("priority")),
+                ReportType.valueOf(rs.getString("type")), userInfoAss,
+                rs.getObject("date", LocalDateTime.class),
+                Status.valueOf(rs.getString("status")), userInfoAuth);
             reports.add(reportInfo);
           }
         } catch (SQLException se) {
@@ -140,43 +163,7 @@ public class Report {
     } catch (SQLException se) {
       throw new DataBaseException("No Reports Found", se);
     }
-
-    return reports;
-  }
-
-  public static List<Report> returnAllReports(Status status)
-      throws LoginException, DataBaseException {
-    List<Report> reports = new ArrayList<Report>();
-    String connectionURL =
-        "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
-    try (Connection conn = DriverManager.getConnection(connectionURL)) {
-      String sql = "SELECT * FROM reports WHERE status = ?";
-      try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-        stmt.setString(1, status.name());
-        try (ResultSet rs = stmt.executeQuery()) {
-          while (rs.next()) {
-            String uiEmail = rs.getString("assignee");
-            User userInfo = getFromLogin(uiEmail);
-            Report reportInfo =
-                new Report(rs.getInt("id"), rs.getString("title"),
-                           rs.getString("description"),
-                           ReportLevel.valueOf(rs.getString("level")),
-                           ReportPriority.valueOf(rs.getString("priority")),
-                           ReportType.valueOf(rs.getString("type")), userInfo,
-                           rs.getObject("date", LocalDateTime.class),
-                           Status.valueOf(rs.getString("status")));
-            reports.add(reportInfo);
-          }
-        } catch (SQLException se) {
-          throw new DataBaseException("No Reports Found", se);
-        }
-      } catch (SQLException se) {
-        throw new DataBaseException("No Reports Found", se);
-      }
-    } catch (SQLException se) {
-      throw new DataBaseException("No Reports Found", se);
-    }
-
+    System.out.println(reports);
     return reports;
   }
 
@@ -203,24 +190,6 @@ public class Report {
     System.out.println(count);
     return count;
   }
+
+
 }
-
-//  private class Report getFromResulSet
-//  (ResultSet rs) {
-//    String uiEmail = rs.getString("assigne");
-//    User userInfo = getFromLogin(uiEmail);
-//    Report reportInfo = new Report(
-//        rs.getInt("id"), rs.getString("title"), rs.getString("description"),
-//        ReportLevel.valueOf(rs.getString("level")),
-//        ReportPriority.valueOf(rs.getString("priority")),
-//        ReportType.valueOf(rs.getString("type")), userInfo);
-//    return reportInfo;
-//  }
-
-// gitReportsCounet : throw database exception
-
-// git from resulset : throw database exception login exceptionn :
-
-// gitAllReports : retreive array list of report t: throw databaase exception
-// and login exception
-// get from login
