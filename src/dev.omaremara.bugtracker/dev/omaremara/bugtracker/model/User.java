@@ -20,7 +20,7 @@ public class User {
     this.name = name;
   }
 
-  public void submit() {
+  public void submit() throws DataBaseException{
     String connectionUrl =
         "jdbc:sqlserver://localhost:1433;databaseName=master;integratedSecurity=true";
     try (Connection conn = DriverManager.getConnection(connectionUrl)) {
@@ -32,10 +32,10 @@ public class User {
         stmt.setString(4, this.userRole.name());
         int rows = stmt.executeUpdate();
       } catch (SQLException se) {
-        se.printStackTrace();
+        throw new DataBaseException("Cannot INSERT into users", se);
       }
     } catch (SQLException se) {
-      se.printStackTrace();
+      throw new DataBaseException("Cannot INSERT into users", se);
     }
   }
 
@@ -52,10 +52,7 @@ public class User {
     try (Connection conn = DriverManager.getConnection(connectionUrl)) {
       try (Statement stmt = conn.createStatement()) {
         UserRole userRole1 = UserRole.DEVELOPER;
-        System.out.println(userRole1);
-        System.out.println(uRole);
           if (userRole1 == uRole){
-            System.out.println("in role");
             sql.append(" WHERE role = 'DEVELOPER'");
           }
         try (ResultSet rs = stmt.executeQuery(sql.toString())) {
@@ -74,7 +71,6 @@ public class User {
     }  catch (SQLException se) {
         throw new DataBaseException("Cannot get users", se);
       }
-    System.out.println(Alldevelopers);
     return Alldevelopers;
   }
 
@@ -123,10 +119,10 @@ public class User {
         stmt.setString(1, this.email);
         stmt.executeUpdate();
       } catch (SQLException se) {
-        throw new DataBaseException("Cannot Delete users2", se);
+        throw new DataBaseException("Cannot Delete users", se);
       }
     } catch (SQLException se) {
-      throw new DataBaseException("Cannot Delete users3", se);
+      throw new DataBaseException("Cannot Delete users", se);
     }
   }
   // update user
@@ -174,7 +170,6 @@ public class User {
     } catch (SQLException se) {
       throw new DataBaseException("Cannot get user stats", se);
     }
-
     return hm;
   }
 }

@@ -30,8 +30,10 @@ import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
-public class NewReportController {
 
+public class NewReportController {
+  private String screenshotPath = "";
+  private Report report;
   public void submit(String title, String description, ReportType type,
                      ReportPriority priority, ReportLevel level,
                      Project project, User assigne, Label errorLabel) {
@@ -39,10 +41,10 @@ public class NewReportController {
 
       Report NewReport =
           new Report(Report.getCountOfReport(), title, description, level,
-                     priority, type, project, assigne, LocalDateTime.now(),
-                     ReportStatus.OPENED, Main.user); // not finished
+                     priority, type, assigne, LocalDateTime.now(),
+                     Status.OPENED, Main.user , project , screenshotPath);
       Email newEmail = new Email(assigne.email, title, description);
-      newEmail.SendEmail();
+      Email.SendEmail();
       report.submit();
       ViewUtil.setSceneRoot(new ReportListView());
     } catch (DataBaseException | InavliedReportException exception) {
@@ -67,7 +69,7 @@ public class NewReportController {
 
   public void cancel() { ViewUtil.setSceneRoot(new ReportListView()); }
 
-  public static ArrayList<Project> getAllProjects(label errorLabel) {
+  public List<Project> getAllProjects(label errorLabel) {
     // return AllProject
     try {
       return Project.getAllProjects();
@@ -77,10 +79,10 @@ public class NewReportController {
     return new ArrayList<Project>();
   }
 
-  public static ArrayList<User> getAllDevelopers(  UserRole DEVELOPER) {
+  public static ArrayList<User> getAllDevelopers( Label errorLabel) {
     // return AllDevelopers
-    try {
-      return User.getAllDevelopers();
+    try { UserRole DEVELOPER ;
+      return User.getAllDevelopers( DEVELOPER );
     } catch (DataBaseException exception) {
       errorLabel.setText(exception.getMessage());
     }

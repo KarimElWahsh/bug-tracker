@@ -27,20 +27,20 @@ public class ReportListController {
       if (getClosedReports ^ getOpenedReports) {
         if (getMyReportsOnly) {
           if (getClosedReports) {
-            return Report.getAllReports(ReportStatus.CLOSED, Main.user);
+            return Report.getAllReports(Status.CLOSED, Main.user.email);
           } else {
-            return Report.getAllReports(ReportStatus.OPENED, Main.user);
+            return Report.getAllReports(Status.OPENED, Main.user.email);
           }
         } else {
           if (getClosedReports) {
-            return Report.getAllReports(ReportStatus.CLOSED, null);
+            return Report.getAllReports(Status.CLOSED, null);
           } else {
-            return Report.getAllReports(ReportStatus.OPENED, null);
+            return Report.getAllReports(Status.OPENED, null);
           }
         }
       } else {
         if (getMyReportsOnly) {
-          return Report.getAllReports(null, Main.user);
+          return Report.getAllReports(null,Main.user.email);
         } else {
           return Report.getAllReports(null, null);
         }

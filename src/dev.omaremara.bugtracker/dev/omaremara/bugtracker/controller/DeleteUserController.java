@@ -7,12 +7,13 @@ import dev.omaremara.bugtracker.view.AdministrationView;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Label;
+//import java.awt.Label;
 
 public class DeleteUserController {
 
-  public static void deleteUser(User user, label errorLabel) {
+  public static void deleteUser(User user, Label errorLabel) {
     try {
-      user = User.removeUser();
+      user.removeUser();
       ViewUtil.setSceneRoot(new AdministrationView());
     } catch (DataBaseException exception) {
       errorLabel.settext(exception.getMessage());

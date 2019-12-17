@@ -7,9 +7,9 @@ import javafx.scene.control.Label;
 
 public class AddUserController {
 
-  public static void adduser(String name, String email, String password, UserRole role, Label errorLabel){
+  public static void addUser(String name, String email, String password, UserRole role, Label errorLabel){
     try {
-    User user = new User(name, email, password, role);
+    User user = new User( email, password, role , name);
     user.submit();
   } catch (DataBaseException exception) {
     errorLabel.setText(exception.getMessage());

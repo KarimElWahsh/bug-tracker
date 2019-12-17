@@ -5,9 +5,9 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 public class Email {
-  private String to;
-  private String subject;
-  private String text;
+  private static String to;
+  private static String subject;
+  private static String text;
 
   public Email(String to, String subject, String text) {
     this.to = to;

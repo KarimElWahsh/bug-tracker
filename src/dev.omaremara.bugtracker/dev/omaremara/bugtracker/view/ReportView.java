@@ -1,9 +1,9 @@
 package dev.omaremara.bugtracker.view;
 
 import dev.omaremara.bugtracker.Main;
-import dev.omaremara.bugtracker.controller.ReportController;
+import dev.omaremara.bugtracker.controller.ReportControlleR;
 import dev.omaremara.bugtracker.model.Report;
-import dev.omaremara.bugtracker.model.ReportStatus;
+import dev.omaremara.bugtracker.model.Status;
 import dev.omaremara.bugtracker.util.ViewUtil;
 import dev.omaremara.bugtracker.view.ReportListView;
 import dev.omaremara.bugtracker.view.View;
@@ -39,7 +39,7 @@ public class ReportView implements View {
   public ReportView(Report report) { this.report = report; }
 
   public Parent getRoot() {
-    ReportController controller = new ReportController();
+    ReportControlleR controller = new ReportControlleR();
 
     Label errorLabel = new Label();
     errorLabel.setTextFill(Color.RED);
@@ -130,7 +130,7 @@ public class ReportView implements View {
 
     if (Main.user.email.equals(report.assignee.email)) {
       Button toggleStatusButton = new Button(
-          this.report.status.equals(ReportStatus.OPENED) ? "Close" : "Reopen");
+          this.report.status.equals(Status.OPENED) ? "Close" : "Reopen");
       toggleStatusButton.setAlignment(Pos.BOTTOM_RIGHT);
       toggleStatusButton.setDefaultButton(true);
       toggleStatusButton.setOnAction(e -> {

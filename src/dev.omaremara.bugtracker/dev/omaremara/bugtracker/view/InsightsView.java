@@ -1,6 +1,6 @@
 package dev.omaremara.bugtracker.view;
 
-import dev.omaremara.bugtracker.controller.InsightsController;
+import dev.omaremara.bugtracker.controller.InsightController;
 import dev.omaremara.bugtracker.model.User;
 import dev.omaremara.bugtracker.util.ViewUtil;
 import dev.omaremara.bugtracker.view.ReportListView;
@@ -56,7 +56,7 @@ public class InsightsView implements View {
     dataSeries.setName("Number of reports per user.");
 
     Map<User, Integer> usersStats =
-        InsightsController.getUsersStats(errorLabel);
+        InsightController.getUsersStats(errorLabel);
     for (Map.Entry<User, Integer> entry : usersStats.entrySet()) {
       dataSeries.getData().add(new XYChart.Data<String, Number>(
           entry.getKey().name, entry.getValue()));

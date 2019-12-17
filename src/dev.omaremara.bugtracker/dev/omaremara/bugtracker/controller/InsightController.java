@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.control.Label;
 
-public class InsightsController {
+public class InsightController {
 
   public static Map<User, Integer> getUsersStats(Label errorLabel) {
     try {

@@ -12,9 +12,6 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 public class LoginController {
-  private TextField emailField;
-  private PasswordField passwordField;
-  private Label errorLabel;
 
   public void login(String email, String password, Label errorLabel) {
     try {

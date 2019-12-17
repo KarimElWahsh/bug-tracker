@@ -33,7 +33,6 @@ public class Project {
     } catch (SQLException se) {
       throw new DataBaseException("NO PROJECTS FOUND", se);
     }
-    System.out.println(projectList);
     return projectList;
   }
 }
