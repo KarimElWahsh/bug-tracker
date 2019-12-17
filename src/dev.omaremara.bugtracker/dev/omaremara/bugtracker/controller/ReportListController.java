@@ -10,8 +10,7 @@ import javafx.scene.control.Label; //import Label Class
 
 public class ReportListController {
   private Label errorlabel;
-  // variable Report
-  // attached Label
+
   public  static void newReport(ActionEvent e) {
     Stage stage = Main.primaryStage;
     Scene newReportScene = new NewReportView().getScene();
