@@ -27,5 +27,5 @@ src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/ReportListContr
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/ReportController.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/AddUserController.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/DeleteUserController.java
-src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/InsightsController.java
+src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/InsightController.java
 src/dev.omaremara.bugtracker/dev/omaremara/bugtracker/controller/Email.java
