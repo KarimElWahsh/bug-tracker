@@ -76,7 +76,8 @@ public class NewReportController {
     }
     return new ArrayList<Project>();
   }
-  public static List<User> getAllDevelopers(UserRole.DEVELOPER) {
+
+  public static ArrayList<User> getAllDevelopers(  UserRole DEVELOPER) {
     // return AllDevelopers
     try {
       return User.getAllDevelopers();

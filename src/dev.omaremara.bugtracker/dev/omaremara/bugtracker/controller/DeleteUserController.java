@@ -27,4 +27,3 @@ public class DeleteUserController {
     return new ArrayList<User>();
   }
 }
-}
