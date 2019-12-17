@@ -1,46 +1,53 @@
 package dev.omaremara.bugtracker.controller;
 
 import dev.omaremara.bugtracker.Main;
+import dev.omaremara.bugtracker.model.Report;
+import dev.omaremara.bugtracker.model.Status;
+import dev.omaremara.bugtracker.model.exception.DataBaseException;
+import dev.omaremara.bugtracker.model.exception.LoginException;
+import dev.omaremara.bugtracker.view.AdministrationView;
+import dev.omaremara.bugtracker.view.InsightsView;
 import dev.omaremara.bugtracker.view.LoginView;
 import dev.omaremara.bugtracker.view.NewReportView;
+import dev.omaremara.bugtracker.view.ReportView;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import javafx.scene.control.Label; //import Label Class
+
 
 public class ReportListController {
-  private Label errorlabel;
-
-  public  static void newReport(ActionEvent e) {
-    Stage stage = Main.primaryStage;
-    Scene newReportScene = new NewReportView().getScene();
-    stage.setScene(newReportScene);
+  public static List<Report> getAllReports(boolean getOpenedReports,
+                                           boolean getClosedReports,
+                                           boolean getMyReportsOnly,
+                                           Label errorLabel) {
+    try {
+      if (getClosedReports ^ getOpenedReports) {
+        if (getMyReportsOnly) {
+          if (getClosedReports) {
+            return Report.getAllReports(ReportStatus.CLOSED, Main.user);
+          } else {
+            return Report.getAllReports(ReportStatus.OPENED, Main.user);
+          }
+        } else {
+          if (getClosedReports) {
+            return Report.getAllReports(ReportStatus.CLOSED, null);
+          } else {
+            return Report.getAllReports(ReportStatus.OPENED, null);
+          }
+        }
+      } else {
+        if (getMyReportsOnly) {
+          return Report.getAllReports(null, Main.user);
+        } else {
+          return Report.getAllReports(null, null);
+        }
+      }
+    } catch (DataBaseException | LoginException exception) {
+      errorLabel.setText(exception.getMessage());
+    }
+    return new ArrayList<Report>();
   }
-  public static void logOut() {
-    Stage stage = Main.primaryStage;
-    Scene loginScene = new LoginView().getScene();
-    stage.setScene(loginScene);
-  }
-  public static ArrayList<Report> getAllReports(Label errorlabel){
-  try {
-    return Report.getAllReports();
-  } catch (Exception exception){
-    errorlabel.setText(exception.getMessage());
-  }
-  return new ArrayList<Report>();
-  }
-  public static void administer()
-  {
-    Stage stage = Main.primaryStage;
-    Scene administerScene = new AdministrationView().getScene();
-    stage.setScene(administerScene);
-  }
-  public static void insights()
-  {
-        Stage stage = Main.primaryStage;
-    Scene insightsScene = new InsightsView().getScene();
-    stage.setScene(insightsScene);
-
-  }
-
 }

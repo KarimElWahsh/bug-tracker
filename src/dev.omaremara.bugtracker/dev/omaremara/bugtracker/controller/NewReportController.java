@@ -6,7 +6,7 @@ import dev.omaremara.bugtracker.model.ReportPriority;
 import dev.omaremara.bugtracker.model.ReportType;
 import dev.omaremara.bugtracker.model.Status;
 import dev.omaremara.bugtracker.model.exception.DataBaseException;
-import dev.omaremara.bugtracker.model.exception.InvalidReportException;
+import dev.omaremara.bugtracker.model.exception.InavliedReportException;
 import dev.omaremara.bugtracker.model.Report;
 import dev.omaremara.bugtracker.model.Project;
 import dev.omaremara.bugtracker.model.User;
@@ -45,7 +45,7 @@ public class NewReportController {
       newEmail.SendEmail();
       report.submit();
       ViewUtil.setSceneRoot(new ReportListView());
-    } catch (DataBaseException | InvalidReportException exception) {
+    } catch (DataBaseException | InavliedReportException exception) {
       errorLabel.setText(exception.getMessage());
     }
   }
